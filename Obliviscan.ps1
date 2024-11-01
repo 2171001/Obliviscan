@@ -1,6 +1,6 @@
-# Define a PowerShell script to scan, fix, and secure your system
+# Obliviscan - Comprehensive Malware Scanner and System Hardening Script
 
-# Function to trigger a quick scan with Windows Defender (on key folders)
+# Function to initiate a quick Windows Defender scan on key folders
 function Start-QuickDefenderScan {
     $scanStatus = Get-MpComputerStatus
     if ($scanStatus.AntivirusScanRunning) {
@@ -13,13 +13,14 @@ function Start-QuickDefenderScan {
     }
 }
 
-# Function to clean up the system (removing temp files, old updates, etc.)
+# Function to clean up temporary files and Windows Update cache with -Recurse to avoid prompts
 function Cleanup-System {
     Write-Host "Cleaning up unnecessary files and optimizing the system..." -ForegroundColor Yellow
+
     # Clean temporary files with error handling
     Get-ChildItem "C:\Windows\Temp\*" -Recurse | ForEach-Object {
         Try {
-            Remove-Item $_.FullName -Force
+            Remove-Item $_.FullName -Recurse -Force
             Write-Host "Deleted: $($_.FullName)"
         } Catch {
             Write-Host "Could not delete: $($_.FullName)" -ForegroundColor Yellow
@@ -28,7 +29,7 @@ function Cleanup-System {
 
     Get-ChildItem "C:\Users\*\AppData\Local\Temp\*" -Recurse | ForEach-Object {
         Try {
-            Remove-Item $_.FullName -Force
+            Remove-Item $_.FullName -Recurse -Force
             Write-Host "Deleted: $($_.FullName)"
         } Catch {
             Write-Host "Could not delete: $($_.FullName)" -ForegroundColor Yellow
@@ -56,6 +57,7 @@ function Cleanup-System {
 # Function to enable additional security settings (e.g., enable firewall, exploit protection, etc.)
 function Secure-System {
     Write-Host "Applying system security settings..." -ForegroundColor Yellow
+
     # Enable Windows Firewall
     Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True
     Write-Host "Windows Firewall enabled."
@@ -70,7 +72,7 @@ function Secure-System {
     }
 
     # Enable Exploit Protection
-    Set-ProcessMitigation -System -Enable DEP, SEHOP, ASLR
+    Set-ProcessMitigation -System -Enable DEP, SEHOP, ForceRelocateImages, BottomUp, HighEntropy
     Write-Host "Exploit protection enabled."
 
     Write-Host "System secured with additional protection settings."
