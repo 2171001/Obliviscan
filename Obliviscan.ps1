@@ -1,5 +1,27 @@
 # Obliviscan - Comprehensive Malware Scanner and System Hardening Script
 
+# Function to unlock BitLocker-encrypted drives
+function Unlock-BitLockerVolumes {
+    Write-Host "Checking for BitLocker-encrypted drives..." -ForegroundColor Yellow
+    $bitlockerVolumes = Get-BitLockerVolume | Where-Object { $_.VolumeStatus -eq 'Locked' }
+
+    if ($bitlockerVolumes) {
+        foreach ($volume in $bitlockerVolumes) {
+            Write-Host "Found locked BitLocker volume: $($volume.MountPoint)"
+            $recoveryPassword = Read-Host -Prompt "Enter BitLocker recovery password for $($volume.MountPoint)"
+
+            Try {
+                Unlock-BitLocker -MountPoint $volume.MountPoint -RecoveryPassword $recoveryPassword
+                Write-Host "Unlocked BitLocker volume at $($volume.MountPoint)" -ForegroundColor Green
+            } Catch {
+                Write-Host "Failed to unlock $($volume.MountPoint). Please check the recovery password." -ForegroundColor Red
+            }
+        }
+    } else {
+        Write-Host "No locked BitLocker volumes found." -ForegroundColor Green
+    }
+}
+
 # Function to initiate a quick Windows Defender scan on key folders
 function Start-QuickDefenderScan {
     $scanStatus = Get-MpComputerStatus
@@ -17,35 +39,54 @@ function Start-QuickDefenderScan {
 function Cleanup-System {
     Write-Host "Cleaning up unnecessary files and optimizing the system..." -ForegroundColor Yellow
 
-    # Clean temporary files with error handling
+    # Clean temporary files with error handling and retry logic
     Get-ChildItem "C:\Windows\Temp\*" -Recurse | ForEach-Object {
         Try {
             Remove-Item $_.FullName -Recurse -Force
             Write-Host "Deleted: $($_.FullName)"
-        } Catch {
-            Write-Host "Could not delete: $($_.FullName)" -ForegroundColor Yellow
+        } Catch [System.IO.IOException] {
+            Start-Sleep -Seconds 2  # Wait and retry
+            Try {
+                Remove-Item $_.FullName -Recurse -Force
+                Write-Host "Deleted after retry: $($_.FullName)"
+            } Catch {
+                Write-Host "Could not delete: $($_.FullName) - File in use" -ForegroundColor Yellow
+            }
         }
     }
 
+    # Clean user temp files with error handling and retry logic
     Get-ChildItem "C:\Users\*\AppData\Local\Temp\*" -Recurse | ForEach-Object {
         Try {
             Remove-Item $_.FullName -Recurse -Force
             Write-Host "Deleted: $($_.FullName)"
-        } Catch {
-            Write-Host "Could not delete: $($_.FullName)" -ForegroundColor Yellow
+        } Catch [System.IO.IOException] {
+            Start-Sleep -Seconds 2  # Wait and retry
+            Try {
+                Remove-Item $_.FullName -Recurse -Force
+                Write-Host "Deleted after retry: $($_.FullName)"
+            } Catch {
+                Write-Host "Could not delete: $($_.FullName) - File in use" -ForegroundColor Yellow
+            }
         }
     }
     Write-Host "Temporary files cleaned."
 
-    # Clean up Windows Update files with error handling
+    # Clean up Windows Update files with error handling and retry logic
     Write-Host "Cleaning up Windows Update cache..."
     Stop-Service -Name wuauserv
     Get-ChildItem "C:\Windows\SoftwareDistribution\*" -Recurse | ForEach-Object {
         Try {
             Remove-Item $_.FullName -Recurse -Force
             Write-Host "Deleted: $($_.FullName)"
-        } Catch {
-            Write-Host "Could not delete: $($_.FullName)" -ForegroundColor Yellow
+        } Catch [System.IO.IOException] {
+            Start-Sleep -Seconds 2  # Wait and retry
+            Try {
+                Remove-Item $_.FullName -Recurse -Force
+                Write-Host "Deleted after retry: $($_.FullName)"
+            } Catch {
+                Write-Host "Could not delete: $($_.FullName) - File in use" -ForegroundColor Yellow
+            }
         }
     }
     Start-Service -Name wuauserv
@@ -80,6 +121,7 @@ function Secure-System {
 
 # Start all scans, repairs, and security hardening
 Write-Host "Initiating comprehensive malware scan, system repair, and security hardening..." -ForegroundColor Cyan
+Unlock-BitLockerVolumes
 Start-QuickDefenderScan
 Cleanup-System
 Secure-System
