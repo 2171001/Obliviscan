@@ -95,7 +95,7 @@ This PowerShell script provides a robust solution for scanning your Windows syst
 - **Resource Usage**: The script runs multiple intensive tasks, so it’s recommended to execute it during off-hours to avoid interruptions.
 
 ## Resources
-- [Windows Defender Antivirus Documentation](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-antivirus/windows-defender-antivirus-in-windows-10) 👉 Learn about Windows Defender Antivirus, its scanning abilities, and threat protection features in Windows 10 and 11.
+- [Windows Defender Antivirus Documentation](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-antivirus/windows-defender-antivirus-in-windows-10) <- Learn about Windows Defender Antivirus, its scanning abilities, and threat protection features in Windows 10 and 11.
 - [PowerShell Documentation](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7.1) 👉 Microsoft PowerShell documentation provides details on scripting and commands.
 - [Microsoft BitLocker Documentation](https://docs.microsoft.com/en-us/windows/security/information-protection/bitlocker/bitlocker-overview) 👉 BitLocker is Microsoft’s encryption feature for protecting drives in Windows.
 - [Microsoft Sysinternals Suite](https://docs.microsoft.com/en-us/sysinternals/) 👉 A suite of advanced Windows diagnostic tools, including RootkitRevealer for malware troubleshooting.
