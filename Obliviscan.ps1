@@ -1,11 +1,19 @@
-# Obliviscan - Comprehensive Malware Scanner, Malware Removal, and System Hardening Script
+# Obliviscan - Comprehensive Malware Scanner, Malware Removal, and System Hardening Script for Windows
+
+# Initialize a flag to control the exit prompt
+$promptForExit = $false
 
 # Check if running as administrator; if not, re-run script with elevated privileges
 if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Write-Host "This script requires administrator privileges. Relaunching with elevated permissions..." -ForegroundColor Yellow
     Start-Process powershell.exe -ArgumentList ("-File `"" + $PSCommandPath + "`"") -Verb RunAs
+    $promptForExit = $true
     Exit
 }
+
+# Start transcript to log all output to a file once running with admin privileges
+$logFile = "$PSScriptRoot\Obliviscan_Log.txt"  # This will save the log file in the script's directory
+Start-Transcript -Path $logFile -Append
 
 # Function to unlock BitLocker-encrypted drives
 function Unlock-BitLockerVolumes {
@@ -153,3 +161,12 @@ Secure-System
 Remove-DetectedThreats
 
 Write-Host "All scans, repairs, and security hardening completed. Please review the respective logs for detailed results." -ForegroundColor Cyan
+
+# Stop transcript to end logging
+Stop-Transcript
+Write-Host "Logs saved to $logFile"
+
+# Conditional prompt for exit if the script was elevated
+if ($promptForExit){
+    Read-Host -Prompt "Press ENTER to close the elevated PowerShell window"
+}
