@@ -33,6 +33,7 @@ This PowerShell script provides a robust solution for scanning your Windows syst
   - Enabling Windows Firewall
   - Enabling Secure Boot (if supported by hardware)
   - Applying exploit protections (DEP, SEHOP, ASLR, and more)
+- **Conditional Admin Prompt**: Automatically prompts for administrator privileges only if the script is initially run without them. The script relaunches with elevated permissions, and the PowerShell window remains open for review after completion.
 
 ## Requirements
 - **Windows 10/11** with **PowerShell 5.1** or higher.
@@ -54,9 +55,10 @@ This PowerShell script provides a robust solution for scanning your Windows syst
    ```
 
 ## Usage
-1. Run PowerShell as Administrator:
-   - Open PowerShell and navigate to the directory containing `Obliviscan.ps1`.
-   - **Set the execution policy** to allow the script to run (if not already set):
+1. **Run PowerShell as Administrator** *(Optional)*:
+   - The script automatically checks and prompts for administrator privileges if not initially run with them.
+   - Open PowerShell, navigate to the directory containing `Obliviscan.ps1`, and execute the script.
+   - **Set Execution Policy** to allow the script to run (if not already set):
      ```powershell
      Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
      ```
