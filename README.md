@@ -15,7 +15,18 @@ This PowerShell script provides a robust solution for scanning your Windows syst
 ---
 
 ## Features
-- **Malware Scanning**: Initiates Windows Defender scans on key directories and uses Sysinternals RootkitRevealer to detect hidden malware.
+- **Administrator Check and Auto-Relaunch**: Ensures the script runs with administrator privileges by auto-relaunching with elevated permissions if necessary.
+- **Malware Detection and Removal**: Uses Windows Defender to scan for and remove various types of malware, including:
+  - Boot sector virus
+  - Macro virus
+  - Program virus
+  - Multipartite virus
+  - Encrypted virus
+  - Polymorphic virus
+  - Metamorphic virus
+  - Stealth virus
+  - Armored virus
+  - Hoax virus
 - **File Integrity Repair**: Runs SFC (System File Checker) and DISM (Deployment Image Servicing and Management) to repair corrupted system files.
 - **System Cleanup**: Removes unnecessary files, temporary files, and Windows Update cache with error handling.
 - **System Security Hardening**:
