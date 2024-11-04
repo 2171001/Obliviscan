@@ -36,10 +36,11 @@ This PowerShell script provides a robust solution for scanning your Windows syst
 
 ## Requirements
 - **Windows 10/11** with **PowerShell 5.1** or higher.
-- **Windows Defender** enabled and up-to-date.
-- **Sysinternals RootkitRevealer** tool downloaded and available on your system.
+- **Administrator Privileges**: Script automatically prompts for administrator privileges if not already running as administrator.
+- **Windows Defender** Enabled and up-to-date.
+- **Sysinternals RootkitRevealer** (optional for rootkit detection)
 
-> **Note**: The script must be run with administrative privileges for full functionality.
+> **Note**: Certain advanced malware types, such as polymorphic viruses or boot sector threats, may require additional specialized tools for complete removal.
 
 ## Setup
 1. **Download the Script**: Save the `Obliviscan.ps1` file to a directory on your Windows machine.
