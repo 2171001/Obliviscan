@@ -93,3 +93,10 @@ This PowerShell script provides a robust solution for scanning your Windows syst
 - **Administrative Privileges**: Required for the script’s full functionality, including malware removal and system-hardening tasks.
 - **Advanced Malware**: For highly advanced threats (e.g., polymorphic viruses, rootkits), consider pairing this tool with additional specialized software.
 - **Resource Usage**: The script runs multiple intensive tasks, so it’s recommended to execute it during off-hours to avoid interruptions.
+
+## Resources
+- [Windows Defender Antivirus Documentation](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-antivirus/windows-defender-antivirus-in-windows-10)
+- [PowerShell Documentation](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7.1)
+- [Microsoft BitLocker Documentation](https://docs.microsoft.com/en-us/windows/security/information-protection/bitlocker/bitlocker-overview)
+- [Microsoft Sysinternals Suite](https://docs.microsoft.com/en-us/sysinternals/)
+- [Microsoft Security Baselines](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-security-baselines)
