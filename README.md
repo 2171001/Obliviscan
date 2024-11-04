@@ -1,5 +1,5 @@
 # Obliviscan
-Advanced PowerShell toolkit for Windows system scanning, malware removal, repair, and security hardening—bringing threats into oblivion.
+**Obliviscan** is a comprehensive PowerShell-based malware scanning, removal, and system-hardening script designed to secure Windows systems. It utilizes Windows Defender for scanning, flags and removes detected threats, unlocks BitLocker-encrypted drives for full scanning access, cleans up unnecessary files, and applies additional security measures.
 
 # Comprehensive Malware Scanner and System Hardening Script
 This PowerShell script provides a robust solution for scanning your Windows system for malware, repairing file integrity, cleaning up unnecessary files, and applying essential security hardening. It combines features such as rootkit scanning, Windows Defender antivirus checks, and system cleanup with enhanced security measures, including Windows Firewall and exploit protection.
