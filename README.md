@@ -57,12 +57,12 @@ This PowerShell script provides a robust solution for scanning your Windows syst
 ## Usage
 1. **Run PowerShell as Administrator** *(Optional)*:
    - The script automatically checks and prompts for administrator privileges if not initially run with them.
-   - Open PowerShell, navigate to the directory containing `Obliviscan.ps1`, and execute the script.
+   - Open PowerShell, navigate to the directory containing `Obliviscan.ps1`.
    - **Set Execution Policy** to allow the script to run (if not already set):
      ```powershell
      Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
      ```
-2. Execute the Script:
+2. **Execute the Script**:
    ```powershell
    .\Obliviscan.ps1
    ```
