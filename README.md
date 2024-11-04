@@ -70,27 +70,24 @@ This PowerShell script provides a robust solution for scanning your Windows syst
 ## Detailed Functionality
 1. Administrator Privilege Check
    - The script verifies if it is running as administrator. If not, it restarts itself with elevated permissions to ensure it has full access to system-level functions.
-2. Quick Windows Defender Scan
-   - Scans specified system folders (`C:\Windows`, `C:\Users`, `C:\Programs Files`) to check for common malware locations.
-   - Uses Windows Defender's Quick Scan for faster completion
-3. Rootkit Detection
-   - Leverages **Sysinternals RootkitRevealer** to detect rootkits that may be hiding in the system.
-     Output is logged in `rootkit_scan_results.log`.
-4. System File Integrity Repair
-   - System File Checker (SFC): Scans for and attempts to repair any corrupted system files.
-   - DISM: Ensures the system image's integrity and applies any necessary repairs.
-5. System Cleanup
-   - Deletes temporary files and Windows Update cache files, including error handling for files in use.
-   - Reduces clutter and frees up disk space by targetting:
+2. Quick Malware Detection and Removal
+   - Uses Windows Defender to perform quick scans on essential directories (`C:\Windows`, `C:\Users`, `C:\Program Files`).
+   - Scans for a wide range of malware types and removes detected threats automatically.
+3. BitLocker Volume Unlocking
+   - Detects locked BitLocker-encrypted volumes and prompts for the recovery key to unlock them for scanning.
+   - Ensures full disk access, even for encrypted drives.
+4. System Cleanup
+   - Removes unnecessary files from:
      - `C:\Windows\Temp`
      - `C:\Users\<User>\AppData\Local\Temp`
-     - `C:\Windows\SoftwareDistribution`
-6. System Security Hardening
-   - Windows Firewall: Enables the firewall for Domain, Public, and Private network profiles.
-   - Secure Boot Check: Detects if Secure Boot is enabled and provides guidance if it’s off.
-   - Exploit Protection: Enables Data Execution Prevention (DEP), Structured Exception Handler Overwrite Protection (SEHOP), and Address Space Layout Randomization (ASLR) for increased system resilience.
+     - `C:\Windows\SoftwareDistribution` (Windows Update Cache)
+   - Uses retry logic to handle files in use by other processes.
+5. Security Hardening
+   - **Windows Firewall**: Ensures the firewall is enabled across all network profiles.
+   - **Secure Boot Check**: Detects if Secure Boot is enabled and recommends enabling it if not.
+   - **Exploit Protection**: Enables various exploit protections (DEP, SEHOP, ASLR) to harden system defenses.
 
 ## Notes and Considerations
-- Administrative Privileges: The script requires administrative privileges to perform repairs and make system-level changes.
-- Tamper Protection: If Windows Defender Tamper Protection is enabled, certain actions (e.g., stopping Defender service) may be restricted.
-- Resource Usage: The script performs several intensive tasks and may take some time to complete. It’s recommended to run it during off-hours to avoid interruptions.
+- Administrative Privileges: Required for the script’s full functionality, including malware removal and system-hardening tasks.
+- Advanced Malware: For highly advanced threats (e.g., polymorphic viruses, rootkits), consider pairing this tool with additional specialized software.
+- Resource Usage: The script runs multiple intensive tasks, so it’s recommended to execute it during off-hours to avoid interruptions.
