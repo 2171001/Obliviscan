@@ -1,4 +1,11 @@
-# Obliviscan - Comprehensive Malware Scanner and System Hardening Script
+# Obliviscan - Comprehensive Malware Scanner, Malware Removal, and System Hardening Script
+
+# Check if running as administrator; if not, re-run script with elevated privileges
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+    Write-Host "This script requires administrator privileges. Relaunching with elevated permissions..." -ForegroundColor Yellow
+    Start-Process powershell.exe -ArgumentList ("-File `"" + $PSCommandPath + "`"") -Verb RunAs
+    Exit
+}
 
 # Function to unlock BitLocker-encrypted drives
 function Unlock-BitLockerVolumes {
@@ -32,6 +39,24 @@ function Start-QuickDefenderScan {
         Start-MpScan -ScanPath "C:\Windows"
         Start-MpScan -ScanPath "C:\Users"
         Start-MpScan -ScanPath "C:\Program Files"
+    }
+}
+
+# Function to remove detected malware threats
+function Remove-DetectedThreats {
+    Write-Host "Checking for detected threats to remove..." -ForegroundColor Yellow
+    $threats = Get-MpThreatDetection
+    if ($threats) {
+        $threats | ForEach-Object {
+            Try {
+                Remove-MpThreat -ThreatID $_.ThreatID
+                Write-Host "Removed detected threat: $($_.ThreatName)" -ForegroundColor Green
+            } Catch {
+                Write-Host "Failed to remove threat: $($_.ThreatName)" -ForegroundColor Red
+            }
+        }
+    } else {
+        Write-Host "No active threats detected." -ForegroundColor Green
     }
 }
 
@@ -125,5 +150,6 @@ Unlock-BitLockerVolumes
 Start-QuickDefenderScan
 Cleanup-System
 Secure-System
+Remove-DetectedThreats
 
 Write-Host "All scans, repairs, and security hardening completed. Please review the respective logs for detailed results." -ForegroundColor Cyan
