@@ -68,22 +68,24 @@ This PowerShell script provides a robust solution for scanning your Windows syst
 * If the script detects that it is not running with administrator privileges, it will prompt for elevation automatically.
 
 ## Detailed Functionality
-1. Quick Windows Defender Scan
+1. Administrator Privilege Check
+   - The script verifies if it is running as administrator. If not, it restarts itself with elevated permissions to ensure it has full access to system-level functions.
+2. Quick Windows Defender Scan
    - Scans specified system folders (`C:\Windows`, `C:\Users`, `C:\Programs Files`) to check for common malware locations.
    - Uses Windows Defender's Quick Scan for faster completion
-2. Rootkit Detection
+3. Rootkit Detection
    - Leverages **Sysinternals RootkitRevealer** to detect rootkits that may be hiding in the system.
      Output is logged in `rootkit_scan_results.log`.
-3. System File Integrity Repair
+4. System File Integrity Repair
    - System File Checker (SFC): Scans for and attempts to repair any corrupted system files.
    - DISM: Ensures the system image's integrity and applies any necessary repairs.
-4. System Cleanup
+5. System Cleanup
    - Deletes temporary files and Windows Update cache files, including error handling for files in use.
    - Reduces clutter and frees up disk space by targetting:
      - `C:\Windows\Temp`
      - `C:\Users\<User>\AppData\Local\Temp`
      - `C:\Windows\SoftwareDistribution`
-5. System Security Hardening
+6. System Security Hardening
    - Windows Firewall: Enables the firewall for Domain, Public, and Private network profiles.
    - Secure Boot Check: Detects if Secure Boot is enabled and provides guidance if it’s off.
    - Exploit Protection: Enables Data Execution Prevention (DEP), Structured Exception Handler Overwrite Protection (SEHOP), and Address Space Layout Randomization (ASLR) for increased system resilience.
