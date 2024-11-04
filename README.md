@@ -89,19 +89,18 @@ This PowerShell script provides a robust solution for scanning your Windows syst
    - **Secure Boot Check**: Detects if Secure Boot is enabled and recommends enabling it if not.
    - **Exploit Protection**: Enables various exploit protections (DEP, SEHOP, ASLR) to harden system defenses.
 
+
 ## Notes and Considerations
 - **Administrative Privileges**: Required for the script’s full functionality, including malware removal and system-hardening tasks.
 - **Advanced Malware**: For highly advanced threats (e.g., polymorphic viruses, rootkits), consider pairing this tool with additional specialized software.
 - **Resource Usage**: The script runs multiple intensive tasks, so it’s recommended to execute it during off-hours to avoid interruptions.
 
-## Resources
 
+## Resources
 - [Windows Defender Antivirus Documentation](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-antivirus/windows-defender-antivirus-in-windows-10)  
    Learn more about Windows Defender Antivirus, its scanning capabilities, and threat protection features available in Windows 10 and 11.
-
 - [PowerShell Documentation](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7.1)  
    Official Microsoft documentation for PowerShell, providing detailed information on scripting, commands, and automation capabilities.
-
 - [Microsoft BitLocker Documentation](https://docs.microsoft.com/en-us/windows/security/information-protection/bitlocker/bitlocker-overview)  
    Overview of BitLocker, Microsoft’s full-volume encryption feature, and guidance on managing encrypted drives in Windows.
 - [Microsoft Sysinternals Suite](https://docs.microsoft.com/en-us/sysinternals/)  
