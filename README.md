@@ -27,12 +27,12 @@ This PowerShell script provides a robust solution for scanning your Windows syst
   - Stealth virus
   - Armored virus
   - Hoax virus
-- **File Integrity Repair**: Runs SFC (System File Checker) and DISM (Deployment Image Servicing and Management) to repair corrupted system files.
-- **System Cleanup**: Removes unnecessary files, temporary files, and Windows Update cache with error handling.
-- **System Security Hardening**:
-  - Enables Windows Firewall for all network profiles.
-  - Checks for Secure Boot and recommends enabling it if disabled.
-  - Enables exploit protection features (DEP, SEHOP, ASLR).
+- **BitLocker Support**: Detects and unlocks BitLocker-encrypted drives to ensure they are scanned.
+- **System Cleanup**: Cleans temporary files, user temp files, and Windows Update cache, with retry logic for files actively in use.
+- **System Security Hardening**: Applies key security settings, including:
+  - Enabling Windows Firewall
+  - Enabling Secure Boot (if supported by hardware)
+  - Applying exploit protections (DEP, SEHOP, ASLR, and more)
 
 ## Requirements
 - **Windows 10/11** with **PowerShell 5.1** or higher.
