@@ -44,10 +44,11 @@ This PowerShell script provides a robust solution for scanning your Windows syst
 
 ## Setup
 1. **Download the Script**: Save the `Obliviscan.ps1` file to a directory on your Windows machine.
-2. **Download RootkitRevealer**:
+2. **BitLocker Preparation**: Ensure you have your BitLocker recovery key handy, as the script will prompt for it to unlock any encrypted volumes.
+3. **Download RootkitRevealer**:
    - Visit the [Sysinternals website](https://learn.microsoft.com/en-us/sysinternals/downloads/rootkit-revealer) to download **RootkitRevealer**.
    - Place `RootkitRevealer.exe` in a folder, e.g., `C:\Tools\RootkitRevealer\`.
-3. **Edit the Script**: Update the path to RootkitRevealer in the script:
+4. **Edit the Script**: Update the path to RootkitRevealer in the script:
    ```powershell
    $rootkitRevealerPath = "C:\Tools\RootkitRevealer\RootkitRevealer.exe"
    ```
@@ -55,7 +56,7 @@ This PowerShell script provides a robust solution for scanning your Windows syst
 ## Usage
 1. Run PowerShell as Administrator:
    - Open PowerShell and navigate to the directory containing `Obliviscan.ps1`.
-   - Set the execution policy to allow the script to run (if not set):
+   - **Set the execution policy** to allow the script to run (if not already set):
      ```powershell
      Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
      ```
@@ -63,6 +64,8 @@ This PowerShell script provides a robust solution for scanning your Windows syst
    ```powershell
    .\Obliviscan.ps1
    ```
+
+* If the script detects that it is not running with administrator privileges, it will prompt for elevation automatically.
 
 ## Detailed Functionality
 1. Quick Windows Defender Scan
