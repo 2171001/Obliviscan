@@ -11,6 +11,7 @@ This PowerShell script provides a robust solution for scanning your Windows syst
 - [Usage](#usage)
 - [Detailed Functionality](#detailed-functionality)
 - [Notes and Considerations](#notes-and-considerations)
+- [Resources](#resources)
 
 ---
 
