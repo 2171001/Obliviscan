@@ -6,8 +6,8 @@ $promptForExit = $false
 # Check if running as administrator; if not, re-run script with elevated privileges
 if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Write-Host "This script requires administrator privileges. Relaunching with elevated permissions..." -ForegroundColor Yellow
+    $promptForExit = $true  # Set the flag before relaunching
     Start-Process powershell.exe -ArgumentList ("-File `"" + $PSCommandPath + "`"") -Verb RunAs
-    $promptForExit = $true
     Exit
 }
 
@@ -128,28 +128,59 @@ function Cleanup-System {
     Write-Host "System cleanup completed."
 }
 
-# Function to enable additional security settings (e.g., enable firewall, exploit protection, etc.)
-function Secure-System {
-    Write-Host "Applying system security settings..." -ForegroundColor Yellow
+# Function to apply advanced security hardening
+function Advanced-SecurityHardening {
+    Write-Host "Applying advanced security hardening..." -ForegroundColor Cyan
 
-    # Enable Windows Firewall
-    Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True
-    Write-Host "Windows Firewall enabled."
+    # System-wide Exploit Mitigations
+    Set-ProcessMitigation -System -Enable DEP, SEHOP, ForceRelocateImages, BottomUp, HighEntropy, StrictHandleChecks, CallerChecks, CFG
 
-    # Enable Secure Boot
-    Confirm-SecureBootUEFI | ForEach-Object {
-        if ($_ -eq $true) {
-            Write-Host "Secure Boot is already enabled." -ForegroundColor Green
-        } else {
-            Write-Host "Please enable Secure Boot in BIOS/UEFI for additional protection." -ForegroundColor Red
-        }
-    }
+    # Enable Credential Guard
+    Enable-WindowsOptionalFeature -Online -FeatureName "IsolatedUserMode" -NoRestart
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v "EnableVirtualizationBasedSecurity" /t REG_DWORD /d 1 /f
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v "RequirePlatformSecurityFeatures" /t REG_DWORD /d 1 /f
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v "LsaCfgFlags" /t REG_DWORD /d 1 /f
 
-    # Enable Exploit Protection
-    Set-ProcessMitigation -System -Enable DEP, SEHOP, ForceRelocateImages, BottomUp, HighEntropy
-    Write-Host "Exploit protection enabled."
+    # Enable Secure Boot and Virtualization-Based Security (VBS)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\SecureBoot" /v "SecureBoot" /t REG_DWORD /d 1 /f
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v "EnableVSM" /t REG_DWORD /d 1 /f
 
-    Write-Host "System secured with additional protection settings."
+    # Enable Memory Integrity (HVCI)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v "Enabled" /t REG_DWORD /d 1 /f
+
+    # Enforce ASR Rules (Attack Surface Reduction)
+    powershell -Command "& {(New-Object -ComObject Microsoft.Windows.Security.Mitigation.AuditConfiguration).EnableAll}"
+
+    # Harden SMB Protocols (Disable SMBv1)
+    Disable-WindowsOptionalFeature -Online -FeatureName "SMB1Protocol" -NoRestart
+
+    # Enable Ransomware Protection
+    Set-MpPreference -EnableControlledFolderAccess Enabled
+
+    # Disable Remote Desktop
+    Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 1
+
+    # Block PowerShell Script Execution by Untrusted Scripts
+    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
+
+    # Apply Windows Firewall Rules
+    Set-NetFirewallProfile -Profile Domain,Public,Private -DefaultInboundAction Block -DefaultOutboundAction Allow
+
+    # Enable Defender Tamper Protection
+    Set-MpPreference -EnableTamperProtection Enabled
+
+    # Restrict LLMNR and NetBIOS
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient" /v "EnableMulticast" /t REG_DWORD /d 0 /f
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\NetBT\Parameters" /v "EnableLmhosts" /t REG_DWORD /d 0 /f
+
+    # Ensure Windows Updates are Set to Automatic
+    Set-Service -Name wuauserv -StartupType Automatic
+
+    # Harden UAC (User Account Control)
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableLUA" /t REG_DWORD /d 1 /f
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d 2 /f
+
+    Write-Host "Advanced security hardening applied."
 }
 
 # Start all scans, repairs, and security hardening
@@ -157,7 +188,7 @@ Write-Host "Initiating comprehensive malware scan, system repair, and security h
 Unlock-BitLockerVolumes
 Start-QuickDefenderScan
 Cleanup-System
-Secure-System
+Advanced-SecurityHardening
 Remove-DetectedThreats
 
 Write-Host "All scans, repairs, and security hardening completed. Please review the respective logs for detailed results." -ForegroundColor Cyan
@@ -167,6 +198,6 @@ Stop-Transcript
 Write-Host "Logs saved to $logFile"
 
 # Conditional prompt for exit if the script was elevated
-if ($promptForExit){
+if ($promptForExit) {
     Read-Host -Prompt "Press ENTER to close the elevated PowerShell window"
 }
