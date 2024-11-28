@@ -35,6 +35,14 @@ This PowerShell script provides a robust solution for scanning your Windows syst
   - Enabling Secure Boot (if supported by hardware)
   - Applying exploit protections (DEP, SEHOP, ASLR, and more)
 - **Conditional Admin Prompt**: Automatically prompts for administrator privileges only if the script is initially run without them. The script relaunches with elevated permissions, and the PowerShell window remains open for review after completion.
+- **Advanced Exploit Mitigations**: Enables system-wide protections such as DEP, SEHOP, CFG, and more to safeguard against memory-based attacks.
+- **Credential Guard and VBS**: Protects sensitive credentials and strengthens system security using virtualization-based security.
+- **Memory Integrity (HVCI)**: Prevents malicious kernel-mode drivers from loading.
+- **Attack Surface Reduction (ASR)**: Enforces rules to block common exploit techniques (requires Microsoft Defender).
+- **Ransomware Protection**: Enables Controlled Folder Access to protect critical directories from unauthorized changes.
+- **Firewall and Protocol Hardening**: Configures Windows Firewall rules and disables legacy protocols like SMBv1, LLMNR, and NetBIOS.
+- **Tamper Protection**: Prevents unauthorized changes to Windows Defender settings.
+- **UAC Hardening**: Enhances User Account Control for stricter elevation prompts.
 
 ## Requirements
 - **Windows 10/11** with **PowerShell 5.1** or higher.
@@ -67,6 +75,9 @@ This PowerShell script provides a robust solution for scanning your Windows syst
    ```powershell
    .\Obliviscan.ps1
    ```
+3. **Administrator Privileges**: The script automatically checks for administrator privileges and re-launches with elevated permissions if necessary.
+4. **Advanced Security Features**: Certain features, such as Credential Guard, Memory Integrity, and Attack Surface Reduction, require a system reboot or hardware support (e.g., Secure Boot and virtualization).
+5. **Compatibility Note**: Some advanced mitigations (e.g., SMBv1 disable, Memory Integrity) may cause compatibility issues with older applications or devices. Review system requirements before execution.
 
 * If the script detects that it is not running with administrator privileges, it will prompt for elevation automatically.
 
@@ -101,3 +112,7 @@ This PowerShell script provides a robust solution for scanning your Windows syst
 - [Microsoft BitLocker Documentation](https://docs.microsoft.com/en-us/windows/security/information-protection/bitlocker/bitlocker-overview) 👉 BitLocker is Microsoft’s encryption feature for protecting drives in Windows.
 - [Microsoft Sysinternals Suite](https://docs.microsoft.com/en-us/sysinternals/) 👉 A suite of advanced Windows diagnostic tools, including RootkitRevealer for malware troubleshooting.
 - [Microsoft Security Baselines](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-security-baselines) 👉 Microsoft recommends settings for security baselines to harden Windows systems against threats.
+- [Credential Guard Overview](https://docs.microsoft.com/en-us/windows/security/identity-protection/credential-guard/credential-guard)
+- [Attack Surface Reduction Rules](https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/attack-surface-reduction-rules)
+- [Windows Exploit Protection](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-exploit-guard/exploit-protection-exploit-guard)
+- [Memory Integrity (HVCI)](https://docs.microsoft.com/en-us/windows/security/information-protection/secure-the-windows-10-kernel-with-virtualization-based-protection-of-code-integrity)
